@@ -3,181 +3,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dieight · Developer</title>
+  <title>Dieight</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="bg-grid"></div>
-  <div class="bg-glow glow-1"></div>
-  <div class="bg-glow glow-2"></div>
-
-  <nav class="navbar">
-    <span class="logo">{ D }</span>
+  <nav class="top-nav">
+    <div class="nav-brand">Dieight</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#blog">Blog</a></li>
-      <li><a href="#contact">Contact</a></li>
     </ul>
+    <a href="#contact" class="button-primary">Contact</a>
   </nav>
 
-  <!-- Hero -->
   <header class="hero" id="about">
-    <div class="hero-content">
-      <div class="avatar-wrapper">
-        <div class="avatar-ring"></div>
-        <img class="avatar"
-             src="https://github.com/Dieight.png"
-             alt="Avatar"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231e293b%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%2360a5fa%22 font-size=%2240%22 font-family=%22sans-serif%22>D</text></svg>'">
+    <div class="hero-inner">
+      <img class="avatar"
+           src="https://github.com/Dieight.png"
+           alt="Dieight"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%230f1011%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%235e6ad2%22 font-size=%2236%22 font-family=%22Inter,sans-serif%22 font-weight=%22600%22>D</text></svg>'">
+
+      <div class="hero-text">
+        <h1 class="display-xl">Hi, I'm Dieight</h1>
+        <p class="subhead" id="typed-wrapper">
+          <span id="typed"></span><span class="cursor">|</span>
+        </p>
+        <p class="body-lg">
+          Building elegant software, exploring new technologies, and sharing knowledge through writing.
+        </p>
       </div>
-      <h1 class="hero-title">
-        <span class="greeting">Hi, I'm</span>
-        <span class="name gradient-text">Dieight</span>
-      </h1>
-      <p class="hero-subtitle">
-        <span class="typed-text" id="typed"></span><span class="cursor">|</span>
-      </p>
-      <p class="hero-desc">
-        Passionate about building elegant software, exploring new technologies,
-        and sharing knowledge through writing.
-      </p>
+
       <div class="hero-actions">
-        <a href="#projects" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <a href="#projects" class="button-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           View Projects
         </a>
-        <a href="#contact" class="btn btn-outline">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Get In Touch
+        <a href="https://github.com/Dieight" class="button-secondary" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Skills -->
   <section class="section" id="skills">
-    <h2 class="section-title"><span class="section-number">01.</span> Tech Stack</h2>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-icon">🐍</div>
-        <h3>Python</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">⚡</div>
-        <h3>JavaScript / TS</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">⚛️</div>
-        <h3>React / Vue</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🐳</div>
-        <h3>Docker</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">☁️</div>
-        <h3>Cloud / DevOps</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🗄️</div>
-        <h3>SQL / NoSQL</h3>
-        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+    <div class="section-inner">
+      <span class="eyebrow">Tech Stack</span>
+      <h2 class="display-lg">What I Work With</h2>
+      <div class="card-grid">
+        <div class="feature-card">
+          <h3 class="card-title">Python</h3>
+          <p class="body">Backend services, automation scripts, data processing pipelines, and CLI tools.</p>
+          <div class="tags"><span>FastAPI</span><span>Click</span><span>Pandas</span></div>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">JavaScript / TypeScript</h3>
+          <p class="body">Modern frontend and full-stack development with type-safe, scalable architectures.</p>
+          <div class="tags"><span>Node.js</span><span>TypeScript</span><span>ESNext</span></div>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">React / Vue</h3>
+          <p class="body">Component-driven UI development, state management, and responsive design systems.</p>
+          <div class="tags"><span>React</span><span>Vue 3</span><span>Next.js</span></div>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">Docker</h3>
+          <p class="body">Containerized development environments, multi-service orchestration, CI/CD pipelines.</p>
+          <div class="tags"><span>Docker</span><span>Compose</span><span>K8s</span></div>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">Cloud / DevOps</h3>
+          <p class="body">Infrastructure as code, automated deployments, monitoring and observability.</p>
+          <div class="tags"><span>AWS</span><span>Terraform</span><span>GitHub Actions</span></div>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">SQL / NoSQL</h3>
+          <p class="body">Relational and document databases, schema design, query optimization.</p>
+          <div class="tags"><span>PostgreSQL</span><span>MongoDB</span><span>Redis</span></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Projects -->
   <section class="section" id="projects">
-    <h2 class="section-title"><span class="section-number">02.</span> Featured Projects</h2>
-    <div class="projects-grid">
-      <article class="project-card">
-        <div class="project-header">
-          <svg class="project-folder" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          <div class="project-links">
-            <a href="#" aria-label="GitHub repository"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+    <div class="section-inner">
+      <span class="eyebrow">Projects</span>
+      <h2 class="display-lg">What I've Built</h2>
+      <div class="card-grid">
+        <article class="feature-card project-card">
+          <div class="project-card-header">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6ad2" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <a href="#" class="project-link" aria-label="View on GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
           </div>
-        </div>
-        <h3 class="project-title">Project Name</h3>
-        <p class="project-desc">A brief description of this project. What it does, what problem it solves, and key technologies used.</p>
-        <div class="project-tags"><span>Python</span><span>FastAPI</span><span>Docker</span></div>
-      </article>
-      <article class="project-card">
-        <div class="project-header">
-          <svg class="project-folder" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          <div class="project-links">
-            <a href="#" aria-label="GitHub repository"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+          <h3 class="card-title">Project Name</h3>
+          <p class="body">A brief description of this project. What it does, what problem it solves, and key technologies used.</p>
+          <div class="tags"><span>Python</span><span>FastAPI</span><span>Docker</span></div>
+        </article>
+        <article class="feature-card project-card">
+          <div class="project-card-header">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6ad2" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <a href="#" class="project-link" aria-label="View on GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
           </div>
-        </div>
-        <h3 class="project-title">Another Project</h3>
-        <p class="project-desc">Description of another interesting project with different tech stack and use case.</p>
-        <div class="project-tags"><span>TypeScript</span><span>React</span><span>Node.js</span></div>
-      </article>
-    </div>
-    <div class="section-cta">
-      <a href="https://github.com/Dieight" class="btn btn-outline" target="_blank">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        More on GitHub
-      </a>
+          <h3 class="card-title">Another Project</h3>
+          <p class="body">Description of another interesting project with different tech stack and use case.</p>
+          <div class="tags"><span>TypeScript</span><span>React</span><span>Node.js</span></div>
+        </article>
+      </div>
+      <div class="section-cta">
+        <a href="https://github.com/Dieight" class="button-secondary" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          More on GitHub
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- Blog -->
   <section class="section" id="blog">
-    <h2 class="section-title"><span class="section-number">03.</span> Blog Posts</h2>
-    <div class="blog-grid">
-      <article class="blog-card">
-        <div class="blog-date">Jun 2026</div>
-        <h3 class="blog-title">Getting Started with Modern Web Development</h3>
-        <p class="blog-excerpt">A beginner-friendly guide to setting up a modern frontend stack with best practices...</p>
-        <a href="#" class="blog-link">Read More <span>&rarr;</span></a>
-      </article>
-      <article class="blog-card">
-        <div class="blog-date">May 2026</div>
-        <h3 class="blog-title">Building CLI Tools with Python</h3>
-        <p class="blog-excerpt">How to create powerful and user-friendly command-line tools using Click and Rich...</p>
-        <a href="#" class="blog-link">Read More <span>&rarr;</span></a>
-      </article>
-      <article class="blog-card">
-        <div class="blog-date">Apr 2026</div>
-        <h3 class="blog-title">Docker Best Practices in 2026</h3>
-        <p class="blog-excerpt">Tips and patterns for writing efficient Dockerfiles and managing containers...</p>
-        <a href="#" class="blog-link">Read More <span>&rarr;</span></a>
-      </article>
+    <div class="section-inner">
+      <span class="eyebrow">Writing</span>
+      <h2 class="display-lg">Blog Posts</h2>
+      <div class="card-grid">
+        <article class="feature-card">
+          <span class="caption">Jun 2026</span>
+          <h3 class="card-title"><a href="#" class="link">Getting Started with Modern Web Development</a></h3>
+          <p class="body">A beginner-friendly guide to setting up a modern frontend stack with best practices.</p>
+        </article>
+        <article class="feature-card">
+          <span class="caption">May 2026</span>
+          <h3 class="card-title"><a href="#" class="link">Building CLI Tools with Python</a></h3>
+          <p class="body">How to create powerful and user-friendly command-line tools using Click and Rich.</p>
+        </article>
+        <article class="feature-card">
+          <span class="caption">Apr 2026</span>
+          <h3 class="card-title"><a href="#" class="link">Docker Best Practices in 2026</a></h3>
+          <p class="body">Tips and patterns for writing efficient Dockerfiles and managing containers.</p>
+        </article>
+      </div>
     </div>
   </section>
 
-  <!-- Contact -->
   <section class="section" id="contact">
-    <h2 class="section-title"><span class="section-number">04.</span> Get In Touch</h2>
-    <p class="contact-intro">
-      I'm currently open to new opportunities and collaborations.
-      Whether you have a question or just want to say hi — drop me a message!
-    </p>
-    <div class="contact-links">
-      <a href="mailto:dieight@example.com" class="contact-link">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Email
-      </a>
-      <a href="https://github.com/Dieight" class="contact-link" target="_blank">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
+    <div class="section-inner">
+      <span class="eyebrow">Contact</span>
+      <h2 class="display-lg">Get In Touch</h2>
+      <p class="body-lg contact-desc">
+        Open to new opportunities and collaborations. Drop me a message.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:dieight@example.com" class="button-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </a>
+        <a href="https://github.com/Dieight" class="button-secondary" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
-    <p>Designed &amp; Built by <strong>Dieight</strong> &copy; 2026</p>
+    <div class="footer-inner">
+      <div class="footer-brand">Dieight</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#blog">Blog</a>
+      </nav>
+      <span class="caption">&copy; 2026 Dieight</span>
+    </div>
   </footer>
 
   <script src="script.js"></script>
