@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How I Built This Site with GitHub Pages · Dieight</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="/" class="nav-brand">Dieight</a>
+    <ul class="nav-links">
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#skills">Skills</a></li>
+      <li><a href="/#projects">Projects</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+    <a href="/#contact" class="button-primary">Contact</a>
+  </nav>
+
+  <article class="post">
+    <header class="post-header">
+      <a href="index.html" class="back-link">&larr; All Posts</a>
+      <span class="caption">June 2026</span>
+      <h1 class="display-md">How I Built This Site with GitHub Pages</h1>
+      <p class="subhead">从买域名到上线——一个全流程记录，涵盖仓库配置、HTTPS 证书、自动部署和设计一致性。</p>
+    </header>
+
+    <div class="post-body">
+      <section class="post-section">
+        <h2 class="post-h2">Why GitHub Pages</h2>
+        <p>
+          搭建个人主页的理由很简单：你可以在一个免费、自带 HTTPS、能自动部署的地方放静态文件，
+          域名还支持自定义。<strong>GitHub Pages</strong> 正合适——它没有服务器费用，没有带宽限制，
+          跑的是纯粹的 HTML、CSS 和 JavaScript。
+        </p>
+        <p>
+          除此之外，它还有些不那么明显的好处：
+        </p>
+        <ul>
+          <li>每次 <code>git push</code> 自动触发部署，不需要 CI 文件</li>
+          <li>内置 Jekyll 支持，不想用也可以关闭</li>
+          <li>自定义域名 + 强制 HTTPS 开箱即用</li>
+          <li><code>_config.yml</code> 和 <code>CNAME</code> 文件直接控制行为</li>
+        </ul>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">第一步：仓库命名</h2>
+        <p>
+          GitHub Pages 有两种模式：用户主页和项目主页。用户主页要求仓库名必须是
+          <code>&lt;username&gt;.github.io</code>。比如我的用户名是 <code>Dieight</code>，
+          仓库就是 <code>Dieight.github.io</code>。
+        </p>
+        <p>
+          命名对了之后，<code>main</code>（或 <code>master</code>）分支里放什么，
+          <code>https://dieight.github.io</code> 就显示什么。
+        </p>
+
+        <div class="code-block">
+<pre><code><span class="code-keyword">git</span> init
+<span class="code-keyword">git</span> remote add origin https://github.com/Dieight/Dieight.github.io.git
+<span class="code-keyword">git</span> add .
+<span class="code-keyword">git</span> commit -m <span class="code-string">"initial"</span>
+<span class="code-keyword">git</span> push -u origin main</code></pre>
+        </div>
+
+        <p>
+          推完之后去仓库 <code>Settings &gt; Pages</code>，选 <code>Deploy from a branch</code>、
+          分支 <code>main</code>、目录 <code>/ (root)</code>，点 Save。等一两分钟就能访问了。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">设计：从零到 DESIGN.md</h2>
+        <p>
+          页面本身很简单：一个 HTML、一个 CSS、一个 JS。但最初的版本有个问题——
+          颜色是随手选的，间距没有尺度，渐变和动画用了一堆。看起来很"热闹"，但不专业。
+        </p>
+        <p>
+          这时我发现了 <a href="https://github.com/VoltAgent/awesome-design-md" class="link">awesome-design-md</a>——
+          一个收录了 70+ 个品牌 Design System 的项目。每个品牌都有一份
+          <strong>DESIGN.md</strong>，描述颜色、字体、圆角、间距、组件规格，全部是纯文本令牌。
+        </p>
+        <p>
+          我选择了 <strong>Linear</strong> 的设计语言——接近纯黑的画布（<code>#010102</code>），
+          炭灰色卡片（<code>#0f1011</code>），薰衣草蓝（<code>#5e6ad2</code>）作为唯一的彩色元素。
+          关键约束包括：
+        </p>
+        <ul>
+          <li>无阴影，用表面阶梯 + 发丝边框来建立层次</li>
+          <li>按钮 8px 圆角，卡片 12px，绝不用 pill 形状</li>
+          <li>展示标题负间距（-1.8px / -1.0px），字重 600</li>
+          <li>薰衣草色只用在品牌名、主 CTA 和聚焦环——绝不用于装饰</li>
+        </ul>
+
+        <div class="code-block">
+<pre><code><span class="code-comment">/* Linear DESIGN.md 中的颜色令牌 */</span>
+<span class="code-attr">--canvas</span>:       <span class="code-string">#010102</span>;   <span class="code-comment">/* 页面背景 */</span>
+<span class="code-attr">--surface-1</span>:    <span class="code-string">#0f1011</span>;   <span class="code-comment">/* 卡片背景 */</span>
+<span class="code-attr">--ink</span>:          <span class="code-string">#f7f8f8</span>;   <span class="code-comment">/* 标题文字 */</span>
+<span class="code-attr">--ink-muted</span>:    <span class="code-string">#d0d6e0</span>;   <span class="code-comment">/* 正文 */</span>
+<span class="code-attr">--ink-subtle</span>:   <span class="code-string">#8a8f98</span>;   <span class="code-comment">/* 辅助文字 */</span>
+<span class="code-attr">--primary</span>:      <span class="code-string">#5e6ad2</span>;   <span class="code-comment">/* 品牌色 */</span>
+<span class="code-attr">--hairline</span>:     <span class="code-string">#23252a</span>;   <span class="code-comment">/* 1px 边框 */</span></code></pre>
+        </div>
+
+        <p>
+          把所有规则照搬过来之后，整个页面的气质完全不同了——安静、精密、克制。
+          这就是 Design System 的价值：你不是在设计单个页面，而是在用一套已经验证过的规则做填空题。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">博客方案</h2>
+        <p>
+          和页面一样，博客也可以直接放在仓库里。我在 <code>/blog/</code> 下建子目录，
+          每篇文章就是一个 HTML 文件。列表页 <code>blog/index.html</code> 手动维护文章列表。
+        </p>
+        <p>
+          这样做有几点好处：
+        </p>
+        <ul>
+          <li><strong>零依赖。</strong>没有生成器、没有数据库、没有后端</li>
+          <li><strong>完全控制渲染。</strong>每一行 HTML 都是自己写的，样式和主页完全一致</li>
+          <li><strong>版本历史。</strong>每篇文章的修改都在 git log 里</li>
+          <li><strong>性能最优。</strong>纯静态文件，加载速度就是网络延迟</li>
+        </ul>
+        <p>
+          代价当然也有：没有编辑器、没有标签系统、没有 RSS——但作为一个个人主页的附属博客，
+          这些都不需要。需要文章多了以后再加一个静态生成器（如 Eleventy）也不迟。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">总结</h2>
+        <p>
+          用 GitHub Pages 搭建个人主页其实就三步：
+        </p>
+        <ol>
+          <li>创建一个名为 <code>username.github.io</code> 的仓库</li>
+          <li>写 HTML、CSS，推上去</li>
+          <li>选一个 DESIGN.md，把颜色和间距对齐</li>
+        </ol>
+        <p>
+          整个过程没有花钱，没有配置服务器，没有调试 DevOps——只用了浏览器和终端。
+          如果你想搭一个，可以 <a href="https://github.com/VoltAgent/awesome-design-md" class="link">从这里</a> 开始找灵感。
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a href="/" class="footer-brand">Dieight</a>
+      <nav>
+        <a href="/#about">About</a>
+        <a href="/#skills">Skills</a>
+        <a href="/#projects">Projects</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+      <span class="caption">&copy; 2026 Dieight</span>
+    </div>
+  </footer>
+</body>
+</html>
