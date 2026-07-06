@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Porting a Ray-Traced Black Hole from GLSL to HLSL · Dieight</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="/" class="nav-brand">Dieight</a>
+    <ul class="nav-links">
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#skills">Skills</a></li>
+      <li><a href="/#projects">Projects</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+    <a href="/#contact" class="button-primary">Contact</a>
+  </nav>
+
+  <article class="post">
+    <header class="post-header">
+      <a href="index.html" class="back-link">&larr; All Posts</a>
+      <span class="caption">June 2026</span>
+      <h1 class="display-md">Porting a Ray-Traced Black Hole from GLSL to HLSL</h1>
+      <p class="subhead">把 591 行 GLSL 着色器移植到 Windows Terminal 的 HLSL 接口——语言差异、API 约束和测地线积分的故事。</p>
+    </header>
+
+    <div class="post-body">
+
+      <section class="post-section">
+        <h2 class="post-h2">起点：一个终端里的黑洞</h2>
+        <p>
+          <a href="https://github.com/s0xDk/ghostty-blackhole" class="link" target="_blank">ghostty-blackhole</a>
+          是 s0xDk 为 Ghostty 终端写的自定义像素着色器。它在终端内部运行实时 Schwarzschild 测地线积分，
+          每个像素独立追踪光子在黑洞附近的弯曲路径。效果包括：
+        </p>
+        <ul>
+          <li><strong>黑洞阴影</strong>——冲击参数低于 <code>b_crit = 3&radic;3/2 r_s</code> 的光子螺旋坠入视界</li>
+          <li><strong>引力透镜</strong>——终端文字在爱因斯坦环内弯曲、放大、镜像；远端平滑过渡到弱场偏折</li>
+          <li><strong>吸积盘</strong>——Shakura-Sunyaev 温度分布 + 相对论 Doppler 致亮 + 开普勒轨道条纹。星际穿越同款</li>
+          <li><strong>光子环</strong>——<code>r = 1.5 r_s</code> 光子球附近自然形成的明亮细环</li>
+          <li><strong>引力时间膨胀</strong>——内轨道的条纹图案随黑洞增长而冻结</li>
+        </ul>
+        <p>
+          原版纯 GLSL，只跑在 macOS/Linux 的 Ghostty 终端上。Windows Terminal 用的是 HLSL——微软的
+          DirectX 着色语言。两种语言虽然都写 C-like 的 fragment shader，但在细节上足够不同，
+          不能直接粘贴。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">第一关：语言翻译</h2>
+        <p>
+          GLSL 和 HLSL 的语法有大量微小差异，逐一处理几乎等于重写。以下是实际遇到的关键区别：
+        </p>
+
+        <h3 style="font-size:18px;font-weight:600;color:var(--ink);margin:var(--space-lg) 0 var(--space-md);">类型声明</h3>
+        <div class="code-block">
+<pre><code><span class="code-comment">// GLSL — 赋值时隐式 const</span>
+<span class="code-keyword">const</span> <span class="code-keyword">float</span> HOLE_RADIUS = 0.02;
+
+<span class="code-comment">// HLSL — 全局常量用 static const，全局非常量用 static</span>
+<span class="code-keyword">static const float</span> HOLE_RADIUS = 0.0200;
+<span class="code-keyword">static float</span> g_time = 0.0;   <span class="code-comment">// 运行时可变</span></code></pre>
+        </div>
+
+        <h3 style="font-size:18px;font-weight:600;color:var(--ink);margin:var(--space-lg) 0 var(--space-md);">内置函数名</h3>
+        <p>
+          这是最繁琐的部分。相同的数学语义，不同的函数名：
+        </p>
+        <div class="code-block">
+<pre><code><span class="code-comment">// 向量运算</span>
+<span class="code-keyword">fract</span>(x)   &rarr; <span class="code-keyword">frac</span>(x)
+<span class="code-keyword">mix</span>(a,b,t)  &rarr; <span class="code-keyword">lerp</span>(a,b,t)
+<span class="code-keyword">mod</span>(x,y)    &rarr; <span class="code-keyword">fmod</span>(x,y)
+<span class="code-keyword">inversesqrt</span> &rarr; <span class="code-keyword">rsqrt</span>  </code></pre>
+        </div>
+
+        <h3 style="font-size:18px;font-weight:600;color:var(--ink);margin:var(--space-lg) 0 var(--space-md);">输入/输出语义</h3>
+        <div class="code-block">
+<pre><code><span class="code-comment">// GLSL — layout location 声明</span>
+<span class="code-keyword">layout</span>(location = 0) <span class="code-keyword">out</span> <span class="code-keyword">vec4</span> fragColor;
+
+<span class="code-comment">// HLSL — 语义后缀（: SV_POSITION, : SV_Target 等）</span>
+<span class="code-keyword">float4</span> main(float4 pos : <span class="code-string">SV_POSITION</span>, float2 uv : <span class="code-string">TEXCOORD</span>) : <span class="code-string">SV_Target</span></code></pre>
+        </div>
+
+        <p>
+          这些差异虽然琐碎，但在 591 行的着色器里散布了上百处。用正则批量替换可以解决大部分，
+          但有些需要按上下文判断——比如 GLSL 的 <code>mod</code> 可能是 <code>fmod</code> 也可能是
+          <code>%</code>，取决于参数类型。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">第二关：消失的 Uniforms</h2>
+        <p>
+          这是移植的核心难题。原版 GLSL 使用了 Ghostty 特有的 uniform 变量：
+        </p>
+
+        <table style="width:100%;border-collapse:collapse;margin:var(--space-md) 0 var(--space-lg);font-size:14px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--hairline);text-align:left;">
+              <th style="padding:8px 12px;color:var(--ink);font-weight:600;">Ghostty Uniform</th>
+              <th style="padding:8px 12px;color:var(--ink);font-weight:600;">含义</th>
+              <th style="padding:8px 12px;color:var(--ink);font-weight:600;">Windows Terminal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--hairline);">
+              <td style="padding:8px 12px;color:var(--ink-muted);"><code>iDate.w</code></td>
+              <td style="padding:8px 12px;color:var(--ink-muted);">墙钟时间（秒/小时）</td>
+              <td style="padding:8px 12px;color:var(--ink-subtle);">❌ 无。用 <code>Time</code>（着色器启动起算）替代</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--hairline);">
+              <td style="padding:8px 12px;color:var(--ink-muted);"><code>iTimeCursorChange</code></td>
+              <td style="padding:8px 12px;color:var(--ink-muted);">光标最后移动时间</td>
+              <td style="padding:8px 12px;color:var(--ink-subtle);">❌ 无。空闲检测器不可用</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--hairline);">
+              <td style="padding:8px 12px;color:var(--ink-muted);"><code>iCursorColor</code></td>
+              <td style="padding:8px 12px;color:var(--ink-muted);">光标颜色（Token 模式用）</td>
+              <td style="padding:8px 12px;color:var(--ink-subtle);">❌ 无。Token 模式已移除</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          <strong>Token 模式</strong> 完全不可用——Windows Terminal 的像素着色器没有访问光标颜色
+          uniform 的管道。这个模式用于追踪 Claude Code 上下文窗口占用率，因 API 限制只能留在
+          Ghostty 版本里。
+        </p>
+        <p>
+          <strong>番茄钟模式</strong> 则有变通方案：用 <code>Time</code>（着法器启动后的秒数）替代
+          <code>iDate.w</code>（真实墙钟）。代价是计时在每次切换着法器特效时重置，但功能等价——
+          黑洞在工作阶段逐渐长大，休息阶段保持最小。
+        </p>
+        <p>
+          另一个缺失是<strong>空闲检测</strong>——Ghostty 原版通过 <code>iTimeCursorChange</code>
+          检测用户离开终端，自动切换状态。HLSL 版没有这个能力，番茄钟纯粹基于运行时间，不管
+          你是否在打字。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">第三关：数值精度与性能</h2>
+        <p>
+          Schwarzschild 测地线积分是数值敏感的。每像素追踪光子的 4 阶 Runge-Kutta 积分器使用
+          Binet 形式的加速度公式：
+        </p>
+        <div class="code-block">
+<pre><code>a = -(3/2) * h^2 * x / r^5
+
+<span class="code-comment">// h: 守恒角动量（每像素不同）</span>
+<span class="code-comment">// x: 光子在屏幕平面上的投影坐标</span>
+<span class="code-comment">// r: 光子到黑洞的 3D 距离</span></code></pre>
+        </div>
+        <p>
+          <code>N_STEPS</code>（默认 48，定义在文件顶部）是性能的主要调节旋钮。步数越多，光线追踪
+          越精确（尤其是靠近光子球的绕行轨道），但 GPU 负载随之增加。在集成显卡上，48 步可能
+          已经吃力；降到 32 步仍有可接受的视觉效果。
+        </p>
+        <p>
+          GLSL 和 HLSL 的 <code>float</code> 都是 32 位，但编译器的优化策略不同。
+          HLSL 在 DirectX 11 上下文中对 <code>rsqrt</code> 的实现可能与 GLSL 的
+          <code>inversesqrt</code> 有微小差异，在 <code>r^5</code> 这样的高阶项上累积误差。
+          实测中，在冲击参数接近 <code>b_crit</code> 的边缘情况（光子几乎被捕获），
+          两种实现的判别可能相差 1 个步长——这决定了该像素是阴影还是透镜。调整
+          <code>N_STEPS</code> 和积分收敛阈值可以弥补。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">吸积盘：从 GLSL 到 HLSL 的逐行比对</h2>
+        <p>
+          吸积盘是着色器最复杂的子系统。它基于 Shakura-Sunyaev 薄盘模型的温度分布，
+          加上相对论 Doppler 致亮和开普勒速度场：
+        </p>
+        <div class="code-block">
+<pre><code><span class="code-comment">// 黑体辐射 → RGB 近似（连续光谱积分）</span>
+<span class="code-keyword">vec3</span> blackbody(float T) {
+    <span class="code-comment">// 不使用查找表，直接多项式拟合 Planck 曲线</span>
+    ...
+}
+
+<span class="code-comment">// 相对论 Doppler 因子</span>
+<span class="code-keyword">float</span> g = sqrt(1.0 - 1.5 * r_s / r) / (1.0 - dot(beta, k_hat));
+
+<span class="code-comment">// 观测亮度 ∝ g^N_beaming</span>
+<span class="code-keyword">float</span> beaming = pow(g, DISK_BEAM);</code></pre>
+        </div>
+        <p>
+          这一块完全是对 GLSL 原版的逐行翻译——数学完全一致，只是类型关键字和内置函数名不同。
+          测试时发现一个细节：GLSL 的 <code>atan(y, x)</code> 对应 HLSL 的
+          <code>atan2(y, x)</code>，不是 <code>atan(x)</code>。这种隐蔽差异在编译时不会报错，
+          但会让吸积盘的方位角偏移，导致条纹图案出现相位错误。只能通过对比原版渲染截图来发现。
+        </p>
+      </section>
+
+      <section class="post-section">
+        <h2 class="post-h2">交付</h2>
+        <p>
+          最终产物是两个独立的着色器文件：
+        </p>
+        <ul>
+          <li><code>blackhole.glsl</code> — 原版 Ghostty 着色器（保留全部三种模式）</li>
+          <li><code>blackhole.hlsl</code> — Windows Terminal 着色器（番茄钟 + 演示模式，Token 模式移除）</li>
+        </ul>
+        <p>
+          配一个 <code>claude-token.py</code> 辅助脚本（仅 Ghostty Token 模式用），
+          以及 macOS 上可用的 SwiftUI 调参应用（<code>tuner/</code>），用于直观调整
+          20+ 个可调常量。
+        </p>
+        <p>
+          Windows Terminal 用户只需在 <code>settings.json</code> 中指定
+          <code>experimental.pixelShaderPath</code>，然后按
+          <code>Ctrl+Shift+P</code> → "切换终端视觉特效"。按作者的话说——"你的终端内容
+          就是被引力透镜弯曲的背景天空"。
+        </p>
+        <p>
+          整个移植过程让我对 GPU 着色器的跨平台性有了更深的理解：语言的差异虽然琐碎，
+          但可以系统解决；API 能力的差异才是真正的约束边界。Token 模式因平台 API 不足
+          而无法复现——这是硬件/驱动的架构决策，不是代码能绕开的。
+        </p>
+      </section>
+
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a href="/" class="footer-brand">Dieight</a>
+      <nav>
+        <a href="/#about">About</a>
+        <a href="/#skills">Skills</a>
+        <a href="/#projects">Projects</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+      <span class="caption">&copy; 2026 Dieight</span>
+    </div>
+  </footer>
+</body>
+</html>
